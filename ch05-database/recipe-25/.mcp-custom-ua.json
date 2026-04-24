@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch",
+        "--user-agent",
+        "MyApp/1.0 (research bot)"
+      ]
+    }
+  }
+}
