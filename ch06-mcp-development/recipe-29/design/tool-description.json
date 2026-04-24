@@ -1,0 +1,11 @@
+{
+  "name": "get_customer_context",
+  "description": "Returns a compact summary of a customer including their 3 most recent orders, open support tickets, and key account notes. Use this when preparing a retention offer, diagnosing an issue, or onboarding a new account manager. Do NOT use for bulk reporting: use search_customers with a filter instead.",
+  "parameters": {
+    "customer_id": {
+      "type": "string",
+      "description": "The customer's internal ID from Salesforce (format: '00Q5f...'). For email-based lookup use search_customers first.",
+      "example": "00Q5f000001abcXYZ"
+    }
+  }
+}
