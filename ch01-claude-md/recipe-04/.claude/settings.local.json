@@ -1,0 +1,6 @@
+{
+  "claudeMdExcludes": [
+    "**/packages/legacy/CLAUDE.md",
+    "**/packages/ml-training/.claude/rules/**"
+  ]
+}
