@@ -1,0 +1,21 @@
+name: Gate on Code Review
+on:
+  check_run:
+    types: [completed]
+
+jobs:
+  gate:
+    if: github.event.check_run.name == 'Claude Code Review'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check severity counts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SEVERITY=$(gh api repos/${{ github.repository }}/check-runs/${{ github.event.check_run.id }} \
+            --jq '.output.text | split("bughunter-severity: ")[1] | split(" -->")[0] | fromjson')
+          NORMAL=$(echo "$SEVERITY" | jq -r '.normal')
+          if [ "$NORMAL" -gt 0 ]; then
+            echo "Important findings detected: $NORMAL"
+            exit 1
+          fi

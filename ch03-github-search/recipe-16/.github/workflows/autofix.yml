@@ -1,0 +1,22 @@
+name: Auto-fix PR
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  autofix:
+    if: github.event.review.state == 'changes_requested'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            このPRのレビューコメントを読み、指摘された修正を適用してコミットしてください。
+            テストを実行して、通ることを確認してから終了してください。
