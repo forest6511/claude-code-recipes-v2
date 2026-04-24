@@ -1,0 +1,6 @@
+{
+  "claudeMdExcludes": [
+    "**/other-team/CLAUDE.md",
+    "/Users/me/monorepo/legacy/.claude/rules/**"
+  ]
+}
