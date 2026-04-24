@@ -1,0 +1,19 @@
+[[sources]]
+id = "prod"
+dsn = "postgresql://readonly:pass@prod.db.example.com:5432/app"
+
+[[sources]]
+id = "analytics"
+dsn = "postgresql://readonly:pass@analytics.db.example.com:5432/warehouse"
+
+[[tools]]
+name = "execute_sql"
+source = "prod"
+readonly = true
+max_rows = 100000
+
+[[tools]]
+name = "execute_sql"
+source = "analytics"
+readonly = true
+max_rows = 100000
