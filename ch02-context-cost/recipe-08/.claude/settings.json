@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/log-compact.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
