@@ -1,0 +1,6 @@
+{
+  "autoMemoryDirectory": "~/claude-memory-archive",
+  "claudeMdExcludes": [
+    "**/legacy-package/CLAUDE.md"
+  ]
+}
