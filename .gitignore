@@ -137,3 +137,12 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Override ~/.gitignore_global for recipe samples
+# This repo is a sample distribution for claude-code-recipes book readers,
+# so CLAUDE.md / CLAUDE.local.md / .claude/ files in recipe directories
+# must be tracked even though the global gitignore excludes them.
+!**/CLAUDE.md
+!**/CLAUDE.local.md
+!**/.claude/
+!**/.claude/**
