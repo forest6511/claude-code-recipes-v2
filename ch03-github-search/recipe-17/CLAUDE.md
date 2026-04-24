@@ -1,28 +1,26 @@
-# Git Workflow Rules
+# Project Instructions
 
-Claude Codeを使ったGit操作のルールと戦略を定義します。
+(プロジェクト共通の指示)
 
-## Gitワークフロー
+## Git Workflow
 
-- ブランチ命名規則: feature/*, fix/*, chore/*
-- コミットメッセージ: Conventional Commits形式（feat:, fix:, chore:）
-- PRを作成する前に必ずlintとテストを実行すること
-- mainブランチへの直接コミットは禁止
+- ブランチ命名: feature/*, fix/*, chore/*, exp/*
+- Issue関連ブランチ: feature/issue-<番号>
+- コミットメッセージ: Conventional Commits (feat: fix: chore: refactor: test: docs:)
+- mainへの直接コミット禁止
+- PR作成前に必ずlint+testを実行
 
-## 自動化フロー
+## Issue駆動開発フロー
 
-### Issue駆動開発
+Issue番号を指定された場合:
+1. `gh issue view <番号>` で内容を読む
+2. `feature/issue-<番号>` ブランチを作成
+3. 実装
+4. lint+testをパスさせる
+5. Conventional Commitsでコミット
+6. `gh pr create` でIssueを参照するPRを作成
 
-Issue番号を指定したら、以下のフローで作業を進めます:
-
-1. Issueの内容を読み、実装方針を確認
-2. feature/issue-{番号} ブランチを作成
-3. Issueの内容に基づいて実装
-4. テストを実行して全てパスすることを確認
-5. Conventional Commitsに従ってコミット
-6. PRを作成（タイトルと説明はIssueから生成）
-
-### コミットメッセージフォーマット
+## コミットメッセージフォーマット
 
 ```
 <type>(<scope>): <subject>
@@ -41,12 +39,12 @@ Types:
 - test: テスト追加・修正
 - perf: パフォーマンス改善
 
-## 危険な操作の禁止
+## 危険な操作
 
-以下の操作は`settings.json`の`deny`リストで禁止されています:
+以下は `.claude/settings.json` の `deny` リストで禁止されています。明示的に外さない限り実行されません。
 
 - `git push --force` / `git push -f`
 - `git reset --hard`
-- `git clean -f`
-
-これらの操作は明示的な確認が必要な場合のみ実行してください。
+- `git clean -fd`
+- `git branch -D`
+- `git checkout --`
