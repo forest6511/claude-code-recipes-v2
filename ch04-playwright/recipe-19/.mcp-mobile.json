@@ -3,6 +3,7 @@
     "playwright": {
       "command": "npx",
       "args": [
+        "-y",
         "@playwright/mcp@latest",
         "--device", "iPhone 15"
       ]
