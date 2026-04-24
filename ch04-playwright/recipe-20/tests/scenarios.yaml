@@ -1,0 +1,10 @@
+url: http://localhost:3000
+cases:
+  - name: ログイン成功
+    path: /login
+    steps:
+      - fill: { role: textbox, name: メールアドレス, value: user@example.com }
+      - fill: { role: textbox, name: パスワード, value: password123 }
+      - click: { role: button, name: ログイン }
+    expect:
+      - visible: { role: heading, name: ダッシュボード }
