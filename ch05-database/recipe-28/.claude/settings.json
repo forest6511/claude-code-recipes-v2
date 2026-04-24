@@ -1,0 +1,6 @@
+{
+  "env": {
+    "MAX_MCP_OUTPUT_TOKENS": "50000",
+    "ENABLE_TOOL_SEARCH": "true"
+  }
+}
