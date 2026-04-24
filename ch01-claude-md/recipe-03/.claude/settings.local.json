@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "InstructionsLoaded": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{ts: now, file_path, load_reason, memory_type, trigger_file_path, globs}' >> ~/.claude/instructions.log"
+          }
+        ]
+      }
+    ]
+  }
+}

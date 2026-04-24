@@ -1,24 +1,17 @@
-# レシピ03: .claude/rules/で条件付きルールを設定する
+# Recipe 03: .claude/rules/で条件付きルールを設定する
 
-pathsフロントマターで特定のファイル操作時にだけルールを適用する手法です。ルールをモジュール化することで、トークン消費の最適化とGitコンフリクトの削減を実現します。
+`.claude/rules/` ディレクトリで path-scoped なプロジェクトルールを配置する例。
 
-## ファイル一覧
+## ファイル構成
 
-| ファイル | 説明 |
-|---------|------|
-| `.claude/rules/general.md` | 全ファイルに適用される無条件ルール |
-| `.claude/rules/typescript.md` | TypeScriptファイル操作時のみ適用 |
-| `.claude/rules/testing.md` | テストファイル操作時のみ適用 |
+- `.claude/rules/general.md` — paths なしの無条件ルール
+- `.claude/rules/typescript.md` — `src/**/*.ts` / `src/**/*.tsx` 対象
+- `.claude/rules/testing.md` — `tests/**/*.test.ts` / `**/*.spec.ts` 対象
+- `.claude/rules/frontend/components.md` — サブディレクトリ配置 + `src/components/**/*.tsx` 対象
+- `.claude/settings.local.json` — `InstructionsLoaded` Hook でロード状況をログ記録
 
-## 使い方
+## 関連レシピ
 
-```bash
-# プロジェクトにルールディレクトリをコピー
-cp -r .claude/rules /path/to/your-project/.claude/rules
-```
-
-## カスタマイズ
-
-- **globパターン**: `paths`フロントマターのパターンをプロジェクトのディレクトリ構造に合わせる
-- **ルールの追加**: `frontend/react.md`、`backend/api.md`のようにサブディレクトリで整理可能
-- **否定パターン**: `!src/**/*.test.ts`で特定のファイルを除外可能
+- レシピ01 effective-claude-md
+- レシピ02 claude-md-hierarchy
+- レシピ04 monorepo-claude-md
