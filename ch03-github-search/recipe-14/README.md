@@ -1,51 +1,33 @@
-# レシピ13: Brave Search MCPでWeb検索結果をAI開発に活かす
+# レシピ14: Brave Search MCPでWeb検索結果を活かす
 
-Claude CodeからリアルタイムのWeb検索を可能にするBrave Search MCP設定です。
+Claude Code からリアルタイム Web 検索を使う Brave Search MCP の登録例。
 
 ## 使い方
 
-1. Brave Search APIキーを取得します（無料プラン: 月2,000リクエスト）。
-
 ```bash
-# https://brave.com/search/api/ でアカウント作成・APIキー取得後
+# 1. Brave Search API キーを取得
+# https://brave.com/search/api/ で登録（無料: 月 2,000 リクエスト）
 export BRAVE_API_KEY="BSA..."
-```
 
-2. プロジェクトにMCPサーバーを追加します。
-
-```bash
-# ローカルスコープ（現在のプロジェクトのみ）
-claude mcp add --transport stdio --env BRAVE_API_KEY=${BRAVE_API_KEY} \
-  brave-search -- npx -y @modelcontextprotocol/server-brave-search
-
-# プロジェクトスコープ（チーム共有、.mcp.jsonに書き出し）
+# 2. プロジェクトスコープで登録（.mcp.json に書き出し、チーム共有）
 claude mcp add --transport stdio --scope project \
   --env BRAVE_API_KEY=${BRAVE_API_KEY} \
   brave-search -- npx -y @modelcontextprotocol/server-brave-search
+
+# 3. 接続確認
+# > /mcp
+
+# 4. 検索プロンプト
+# > Next.js 15 App Router のキャッシュ戦略を調べて
 ```
 
-3. 接続状態を確認します。
+## スコープの使い分け
 
-```bash
-> /mcp
+- `--scope local`（既定）: 現プロジェクトで自分だけが使う
+- `--scope project`: `.mcp.json` 経由でチーム共有
+- `--scope user`: 全プロジェクトで自分が使う
 
-# MCP Servers:
-#   brave-search: connected (1 tool available)
-#     - brave_web_search: Performs web searches using Brave Search API
-```
-
-4. 開発中にWeb検索を活用します。
-
-```bash
-> Next.js 15のApp Routerで追加された新しいキャッシュ戦略について調べてください
-
-> このエラーメッセージの解決策をWebで検索してください:
-  "Module not found: Can't resolve '@auth/prisma-adapter'"
-```
-
-## 設定ファイル
-
-`.mcp.json`の内容は以下の通りです。
+## `.mcp.json` の例
 
 ```json
 {
@@ -60,3 +42,9 @@ claude mcp add --transport stdio --scope project \
   }
 }
 ```
+
+## 関連
+
+- レシピ18 複数リポジトリ横断調査
+- レシピ27 Context7 MCP で公式ドキュメント参照
+- レシピ29 カスタム MCP サーバー設計
