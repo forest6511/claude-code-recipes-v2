@@ -1,34 +1,56 @@
-# レシピ22: アクセシビリティテストの自動化（WCAG準拠チェック）
+# レシピ22: アクセシビリティテスト自動化（WCAG）
 
-Playwright MCPのアクセシビリティスナップショットを活用したWCAG 2.1準拠チェックの設定とプロンプト例です。
+自動スキャン（axe-core）と意味的チェック（Claude + `browser_snapshot`）を組み合わせた2層のWCAG 2.2 AA準拠チェック。
 
 ## ファイル一覧
 
-| ファイル | 説明 |
-|---------|------|
-| `.mcp.json` | testing Capability付きの設定 |
-| `a11y-prompt.md` | WCAG監査用のプロンプトテンプレート |
+- `.mcp.json`: Playwright MCP `--caps testing` 設定
+- `tests/a11y.spec.ts`: 3ページ対象の axe-core 自動スキャン
+- `tests/a11y-gated.spec.ts`: critical 違反のみゲートする段階導入版
+- `.github/workflows/a11y.yml`: CI ワークフロー（PR ごとに axe-core 実行）
+- `a11y-prompt.md`: Claude への意味的レビュー用プロンプトテンプレート
 
-## 使い方
+## セットアップ
 
-1. `.mcp.json`をプロジェクトルートにコピーします。
-2. テスト対象のアプリケーションを起動します。
-3. `a11y-prompt.md`の内容をClaude Codeに入力します。
-
-```text
-> http://localhost:3000 のトップページのアクセシビリティを
-> WCAG 2.1 Level AAの基準でチェックして。
-> 問題があれば優先度付きでレポートして。
+```bash
+npm install --save-dev @axe-core/playwright @playwright/test
+npx playwright install --with-deps
 ```
+
+## 実行
+
+### 自動スキャン
+
+```bash
+npx playwright test tests/a11y.spec.ts
+```
+
+### 意味的レビュー
+
+Claude Code に `a11y-prompt.md` の内容を入力して、`browser_snapshot` ベースの監査を依頼します。
+
+## 対応する WCAG タグ
+
+- `wcag2a` / `wcag2aa`: WCAG 2.0 レベル A / AA
+- `wcag21a` / `wcag21aa`: WCAG 2.1 レベル A / AA
+- `wcag22aa`: WCAG 2.2 レベル AA（ターゲットサイズ・Focus Appearance など）
+- `best-practice`: W3C 勧告外の axe-core 推奨ルール
 
 ## 検出できる主な問題
 
-- 画像のalt属性欠落（WCAG 1.1.1）
-- フォームラベルの欠落（WCAG 1.3.1）
-- 見出しレベルの飛び（WCAG 1.3.1）
-- 不明瞭なリンクテキスト（WCAG 2.4.4）
-- アクセシブルな名前の欠落（WCAG 4.1.2）
+axe-core 自動検出:
+- 画像の alt 属性欠落（WCAG 1.1.1）
+- コントラスト不足（WCAG 1.4.3）
+- 重複する id / 不正な ARIA（WCAG 4.1.1, 4.1.2）
+- ターゲットサイズ不足（WCAG 2.2 2.5.8）
 
-## axe-coreとの併用
+Claude 意味的レビュー:
+- 見出し階層の飛び（WCAG 1.3.1）
+- リンクテキストの曖昧さ（WCAG 2.4.4）
+- エラーメッセージの関連付け（WCAG 3.3.1）
+- ランドマークロールの配置（WCAG 1.3.6）
 
-`browser_evaluate`でaxe-coreを注入し、自動検出ルールとClaude Codeの意味的チェックを組み合わせると検出精度が向上します。
+## 2つの結果を統合する運用
+
+- 毎PR: axe-core 自動スキャン（CI ゲート、critical 0 を必須）
+- 週次/月次: Claude 意味的レビュー（リリース前やデザイン変更時）
