@@ -1,7 +1,5 @@
 #!/bin/bash
-# コンテキスト使用率をプログレスバーで表示するステータスラインスクリプト
-# 配置先: ~/.claude/statusline.sh
-# 設定: settings.json の statusLine で登録
+# コンテキスト使用率をプログレスバーで表示する
 input=$(cat)
 
 MODEL=$(echo "$input" | jq -r '.model.display_name')
