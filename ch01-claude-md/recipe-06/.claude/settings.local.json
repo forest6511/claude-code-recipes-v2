@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr list:*)",
+      "Bash(gh issue view:*)",
+      "Read(~/Downloads/**)"
+    ]
+  }
+}

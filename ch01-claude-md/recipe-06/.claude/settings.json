@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(npm test:*)",
+      "Bash(npm run build)",
+      "Bash(git diff:*)",
+      "Bash(git status)",
+      "Read(~/.config/**)",
+      "Edit(/src/**)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(curl *)",
+      "Write(//etc/**)",
+      "Read(//etc/shadow)"
+    ]
+  }
+}
