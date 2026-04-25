@@ -1,0 +1,11 @@
+[project]
+name = "file-analyzer-tested"
+version = "1.0.0"
+requires-python = ">=3.10"
+dependencies = ["mcp[cli]>=1.2.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "mypy>=1.10"]
+
+[tool.mypy]
+strict = true
