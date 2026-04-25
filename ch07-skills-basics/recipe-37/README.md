@@ -1,36 +1,30 @@
-# レシピ37: $ARGUMENTSで動的パラメータを受け取るSkillsを作る
+# レシピ37: $ARGUMENTSで動的パラメータを受け取る
 
-引数展開（`$ARGUMENTS`、`$0`〜`$N`）と前処理コマンド（`` !`command` ``）で動的に動作するSkillsの作成手法です。
+`$ARGUMENTS` 系の引数展開と `` !`command` `` の前処理を組み合わせて、動的に動作する Skill を作るためのサンプル。
 
 ## ファイル一覧
 
 | ファイル | 説明 |
 |---------|------|
-| `fix-issue/SKILL.md` | `$ARGUMENTS`でIssue番号を受け取りバグ修正する |
-| `migrate-component/SKILL.md` | `$0`〜`$2`の位置引数でフレームワーク移行する |
-| `pr-review/SKILL.md` | `` !`command` ``でPR差分を動的注入してレビューする |
-| `release-notes/SKILL.md` | 引数と`` !`command` ``を組み合わせてリリースノートを生成する |
+| `.claude/skills/fix-issue/SKILL.md` | `$ARGUMENTS` で Issue 番号を受け取る最小例 |
+| `.claude/skills/migrate-component/SKILL.md` | `$0` `$1` `$2` の位置引数でフレームワーク移行を指示 |
+| `.claude/skills/migrate-component-named/SKILL.md` | `arguments` フィールドで名前付き引数 (`$component` 等) を宣言 |
+| `.claude/skills/pr-summary/SKILL.md` | `` !`gh pr diff` `` でPR差分を Skill 読み込み時に注入 |
+| `.claude/skills/release-notes/SKILL.md` | `arguments` と `` !`command` `` を組み合わせた実践例 |
 
-## 使い方
+## 呼び出し例
 
-```bash
-cp -r fix-issue /path/to/your-project/.claude/skills/fix-issue
-```
-
-```
-# 呼び出し例
+```text
 > /fix-issue 123
 > /migrate-component SearchBar React Vue
-> /pr-review
-> /release-notes 2.1.0
+> /migrate-component-named SearchBar React Vue
+> /pr-summary
+> /release-notes 1.2.0
 ```
 
-## 変数リファレンス
+## 置換タイミング
 
-| 変数 | 説明 | 例 |
-|------|------|-----|
-| `$ARGUMENTS` | 全引数をそのまま展開 | `123 --verbose` |
-| `$0`（`$ARGUMENTS[0]`） | 第1引数 | `SearchBar` |
-| `$1`（`$ARGUMENTS[1]`） | 第2引数 | `React` |
-| `${CLAUDE_SESSION_ID}` | 現在のセッションID | `abc123def456` |
-| `` !`command` `` | コマンド出力を前処理で注入 | PR差分、gitログ等 |
+| 記法 | タイミング | 用途 |
+|------|----------|------|
+| `` !`command` `` / ` ```! ` ブロック | Skill 読み込み時（前処理） | コマンド出力を本文に焼き込む |
+| `$ARGUMENTS` / `$0` / `$name` / `${CLAUDE_SESSION_ID}` / `${CLAUDE_SKILL_DIR}` | Skill 実行時 | 引数とセッション変数の埋め込み |
