@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Plugin 有効時は ${CLAUDE_PLUGIN_ROOT} が設定される
+exec node "${CLAUDE_PLUGIN_ROOT:-$(dirname "$0")/..}/dist/server.js" "$@"

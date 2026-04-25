@@ -1,0 +1,6 @@
+{
+  "name": "company-knowledge",
+  "version": "1.0.0",
+  "description": "Internal runbook search via MCP and CLI",
+  "author": { "name": "DevOps Team", "email": "devops@example.com" }
+}
