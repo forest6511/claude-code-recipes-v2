@@ -5,3 +5,6 @@ requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.2.0",
 ]
+
+[project.scripts]
+file-analyzer = "file_analyzer:main"
