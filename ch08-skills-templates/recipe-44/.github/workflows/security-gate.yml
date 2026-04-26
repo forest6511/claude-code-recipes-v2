@@ -1,0 +1,19 @@
+name: Security Gate
+on: pull_request
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "/security-scan-all"
+          claude_args: "--output-format json"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Block on Critical/High
+        run: |
+          critical=$(jq '.summary.critical' security-result.json)
+          high=$(jq '.summary.high' security-result.json)
+          [ "$critical" = "0" ] && [ "$high" = "0" ]
