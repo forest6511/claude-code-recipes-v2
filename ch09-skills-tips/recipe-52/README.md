@@ -1,19 +1,22 @@
-# レシピ55: Skillsにフロントマターhooksを定義する（スコープ付きライフサイクル）
+# Recipe 52: フロントマター Hooks で Skills ライフサイクル
 
-`SKILL.md`のフロントマターにHooksを定義することで、そのSkillsが有効な間だけ発動するスコープ付きHooksを設定する方法です。
+SKILL.md frontmatter の `hooks:` フィールドで、その skill が active な間だけ発動するスコープ付き hook を定義するサンプル。
 
-## 含まれるファイル
+## 構成
 
-| ファイル | 説明 |
-|---------|------|
-| `implement-feature/SKILL.md` | ファイル変更時にテスト自動実行するHooks付きSkills |
-| `daily-report/SKILL.md` | onceフラグで1回だけセキュリティスキャンを実行するSkills |
-| `monitored-deploy/SKILL.md` | Pre/Post/StopフックでデプロイをモニタリングするSkills |
+```text
+recipe-52/
+└── .claude/
+    └── skills/
+        ├── implement-feature/SKILL.md   # PostToolUse: ファイル変更後に自動テスト
+        ├── daily-report/SKILL.md        # PreToolUse + once: 初回のみセキュリティスキャン
+        └── monitored-deploy/SKILL.md    # PreToolUse + PostToolUse + Stop: デプロイ全工程の監査
+```
 
 ## ポイント
 
-1. **スコープの限定**: Skills有効中のみHooksが発動し、終了時に自動クリーンアップ
-2. **`settings.json`との違い**: `settings.json`のHooksはセッション全体、フロントマターHooksはSkills単位
-3. **`once`フラグ**: 1回実行後に自動削除。初期化処理に最適
-4. **`async`フラグ**: バックグラウンド実行でSkillsの処理をブロックしない
-5. **全イベント種別対応**: PreToolUse、PostToolUse、Stop等すべて利用可能
+- スキル有効中のみ hooks が発動し、終了時に自動クリーンアップ
+- 全イベント (PreToolUse / PostToolUse / Stop / SessionEnd 等) に対応
+- `async: true`: バックグラウンド実行で skill 本体をブロックしない (公式 hooks.md L2402)
+- `once: true`: skill frontmatter 限定で有効、1 回実行後に削除 (公式 hooks.md "Only honored for hooks declared in skill frontmatter")
+- subagent では `Stop` が自動で `SubagentStop` に変換される
