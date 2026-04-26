@@ -1,117 +1,32 @@
-# レシピ60: tools/disallowedToolsでエージェントの権限を制御する
+# レシピ58: サブエージェントの権限制御とツール制限
 
-カスタムエージェントに対して、使用可能なツールを明示的に制限する方法を解説します。
+`tools` allowlist / `disallowedTools` denylist / `permissionMode` / PreToolUse Hooks / `permissions.deny` を組み合わせた多層防御を扱う中級レシピです。
 
-## ファイル一覧
+## 含まれるサンプル
 
-| ファイル | 説明 |
-|---------|------|
-| `.claude/agents/safe-researcher.md` | 読み取り専用でコードベースを調査するエージェント（Read/Grep/Glob/Bashのみ） |
-| `.claude/agents/db-reader.md` | データベースのSELECTクエリのみ実行するエージェント（Bash + Hooksバリデーション） |
-| `scripts/validate-readonly-query.sh` | SQLクエリがSELECT文のみであることを検証するバリデーションスクリプト |
+- `.claude/agents/safe-researcher.md` — 読み取り専用調査エージェント (`tools: Read, Grep, Glob, Bash` で書き込み系を除外)
+- `.claude/agents/no-writes.md` — `disallowedTools: Write, Edit` でメイン継承から書き込みだけ除外
+- `.claude/agents/db-reader.md` — frontmatter Hooks で SELECT クエリのみ許可
+- `.claude/agents/coordinator.md` — `tools: Agent(worker, researcher)` で起動できるサブエージェント種別を制限
+- `scripts/validate-readonly-query.sh` — Hook 用バリデーション (jq で `tool_input.command` 抽出、書き込みキーワード検出で exit 2)
+- `.claude/settings.json` — `permissions.deny: Agent(...)` で特定サブエージェントの起動を禁止
 
-## 使い方
+## 動作確認
 
 ```bash
-# プロジェクトに配置
-cp -r .claude /path/to/your-project/.claude
-cp -r scripts /path/to/your-project/scripts
-chmod +x /path/to/your-project/scripts/validate-readonly-query.sh
+chmod +x scripts/validate-readonly-query.sh
 
-# バリデーションスクリプトの動作確認
-echo "SELECT * FROM users LIMIT 10" | bash scripts/validate-readonly-query.sh
-# → OK: 読み取り専用クエリとして検証済み
+# Hook 単体テスト (JSON 入力)
+echo '{"tool_input":{"command":"SELECT * FROM users LIMIT 10"}}' | scripts/validate-readonly-query.sh
+echo "exit code: $?"  # → 0
 
-echo "DELETE FROM users WHERE id = 1" | bash scripts/validate-readonly-query.sh
-# → ERROR: 禁止キーワード 'DELETE' が検出されました
+echo '{"tool_input":{"command":"DELETE FROM users"}}' | scripts/validate-readonly-query.sh
+echo "exit code: $?"  # → 2 (blocked)
 ```
-
-## tools と disallowedTools の使い分け
-
-### tools（ホワイトリスト方式）
-
-使用を**許可する**ツールを列挙します。リストにないツールは使用できません。
-
-```yaml
----
-name: read-only-agent
-tools:
-  - Read
-  - Grep
-  - Glob
----
-```
-
-### disallowedTools（ブラックリスト方式）
-
-使用を**禁止する**ツールを列挙します。リストにないツールは使用できます。
-
-```yaml
----
-name: no-write-agent
-disallowedTools:
-  - Write
-  - Edit
-  - Bash
----
-```
-
-### 使い分けの基準
-
-| 方式 | 適したケース |
-|------|-------------|
-| `tools`（ホワイトリスト） | 安全性重視。許可するツールが少数の場合 |
-| `disallowedTools`（ブラックリスト） | 柔軟性重視。禁止するツールが少数の場合 |
-
-## Task(agent_type) 構文
-
-ビルトインエージェント種別をプロンプトから指定する構文です。
-
-```
-Task(agent_type="Explore", prompt="プロジェクト構造を調査して")
-Task(agent_type="Plan", prompt="リファクタリング計画を策定して")
-Task(agent_type="general-purpose", prompt="テストを追加して")
-```
-
-カスタムエージェントの場合:
-
-```
-Task(agent="code-reviewer", prompt="src/を全体レビューして")
-Task(agent="db-reader", prompt="usersテーブルの最新10件を取得して")
-```
-
-## permissionMode
-
-エージェントの権限モードを制御します。`settings.json`で設定可能です。
-
-```json
-{
-  "permissions": {
-    "allow": [
-      "Task(Explore)",
-      "Task(code-reviewer)"
-    ],
-    "deny": [
-      "Task(general-purpose)"
-    ]
-  }
-}
-```
-
-| 設定 | 説明 |
-|------|------|
-| `Task(Explore)` | Exploreエージェントのみ許可 |
-| `Task(code-reviewer)` | 特定のカスタムエージェントを許可 |
-| `Task(*)` | 全てのエージェント起動を許可 |
-
-## 設計のポイント
-
-- 最小権限の原則: エージェントには必要最低限のツールのみ許可する
-- 多層防御: ツール制限 + Hooksバリデーション + `settings.json`権限を組み合わせる
-- バリデーションスクリプトはエージェント定義とは独立して管理する（再利用性向上）
 
 ## 関連レシピ
 
-- レシピ59「カスタムエージェントの定義」
-- レシピ06「パーミッション設計で安全性を確保する」
-- レシピ84「危険コマンドをブロックする」
+- レシピ55「Taskツールの仕組みと独立コンテキスト」
+- レシピ57「カスタムエージェント + initialPrompt + /agents tabbed」
+- レシピ59「Context engineering」
+- レシピ06「パーミッション設計」
