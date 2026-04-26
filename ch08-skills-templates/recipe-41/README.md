@@ -1,22 +1,23 @@
-# レシピ41: テスト駆動開発（TDD）Skillsを作る
+# レシピ41: テスト駆動開発（TDD）Skills
 
-TDDの「Red-Green-Refactor」サイクルをガイドし、テストファーストの開発フローを効率化するSkillsです。
+Red-Green-Refactor サイクルを Skill 本体で固定し、フェーズ境界でユーザー確認を挟む TDD ワークフロー。
 
-## ファイル構成
+## ファイル一覧
 
+| ファイル | 説明 |
+|---------|------|
+| `.claude/skills/tdd/SKILL.md` | 汎用 TDD サイクル (npm test / pytest / go test 対応) |
+| `.claude/skills/tdd-typescript/SKILL.md` | TypeScript / Vitest 特化版 (型チェック込み) |
+
+## 共通設計
+
+- `disable-model-invocation: true` で誤発火を防ぐ（ユーザーが `/tdd` で明示起動）
+- `allowed-tools` はテストランナーのサブコマンド限定 (`Bash(npm test:*)` 等)
+- Phase 1 / 2 / 3 の終了条件をテスト状態で機械的に管理
+
+## 呼び出し例
+
+```text
+> /tdd ユーザー登録時のメール検証
+> /tdd-typescript パスワードハッシュ化ユーティリティ
 ```
-.claude/skills/tdd/
-└── SKILL.md    # TDD開発サイクルSkills本体
-```
-
-## 使い方
-
-```bash
-> /tdd ユーザー認証のパスワードバリデーション機能
-```
-
-## ポイント
-
-- 各フェーズ（Red/Green/Refactor）の完了後にテスト実行結果を必ず表示
-- `disable-model-invocation: true` で意図的にTDDサイクルを起動する設計
-- `allowed-tools` にテストランナーを列挙し、許可ダイアログの中断を防止
