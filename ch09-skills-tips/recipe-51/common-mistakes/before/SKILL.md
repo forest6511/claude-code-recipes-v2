@@ -1,5 +1,5 @@
 ---
-# 失敗例1: YAML構文エラー（コロンがYAMLと衝突）
+# NG: YAML構文エラー（コロンがYAMLと衝突）
 name: my-skill
 description: This skill does: something
 ---

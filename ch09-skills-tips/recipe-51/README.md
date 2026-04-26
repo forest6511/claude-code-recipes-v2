@@ -1,19 +1,27 @@
-# レシピ53: Skillsがサイレント失敗する原因と対処法
+# Recipe 51: Skills のサイレント失敗と対処
 
-Skillsが何も起きない、またはエラーメッセージなしに期待と異なる動作をする6つの典型パターンと体系的なデバッグ手順です。
+Skill が起動しない、起動しても効果が出ない、ログにエラーが出ない、というサイレント失敗のデバッグ手順とよくある失敗パターンのサンプル。
 
-## 含まれるファイル
+## 構成
 
-| ファイル | 説明 |
-|---------|------|
-| `debug-checklist/SKILL.md` | デバッグチェックリストSkills |
-| `common-mistakes/` | よくある失敗パターンのbefore/afterサンプル |
+```text
+recipe-51/
+├── .claude/
+│   └── skills/
+│       └── debug-skills/SKILL.md       # サイレント失敗の体系的デバッグ手順
+├── common-mistakes/
+│   ├── before/SKILL.md                 # 失敗パターンの実例 (YAML構文エラー、name制約違反、context:fork 誤用、!`command` フォールバック欠落)
+│   └── after/SKILL.md                  # 修正例
+└── README.md
+```
 
-## よくある失敗パターン
+## チェック観点
 
-1. **descriptionがユーザーの指示と一致しない** --- 手動呼び出しは成功するが自動発動しない
-2. **キャラクターバジェット超過** --- `/context`で警告を確認
-3. **`context: fork`に明確なタスクがない** --- ガイドラインだけではサブエージェントが何もしない
-4. **`` !`command` ``の前処理が失敗** --- エラーメッセージがそのまま本文に展開される
-5. **YAML構文エラー** --- フロントマターが無視されデフォルト値にフォールバック
-6. **`name`フィールドの制約違反** --- 大文字、アンダースコア、64文字超過
+1. ディレクトリ構造: `.claude/skills/<name>.md` ではなく `.claude/skills/<name>/SKILL.md`
+2. `/skills` コマンドで一覧確認
+3. listing budget 不足で description が切られていないか
+4. `disable-model-invocation: true` で description が context から除外されていないか
+5. `name` の制約: lowercase / 数字 / ハイフンのみ、最大 64 文字
+6. YAML フロントマターの構文エラー (コロン値はクォート必須)
+7. `context: fork` を使っていて明示的タスクがあるか
+8. `` !`command` `` の前処理結果がエラーメッセージのままになっていないか
