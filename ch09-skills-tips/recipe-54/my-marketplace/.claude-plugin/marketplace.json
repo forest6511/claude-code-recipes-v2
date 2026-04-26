@@ -1,0 +1,25 @@
+{
+  "name": "acme-tools",
+  "owner": {
+    "name": "Acme Platform Team",
+    "email": "platform@acme.example"
+  },
+  "metadata": {
+    "description": "Acme 社内向けの開発支援プラグイン集",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "quality-review-plugin",
+      "source": "quality-review-plugin",
+      "description": "Adds a /quality-review skill for quick code reviews",
+      "version": "1.0.0",
+      "author": {
+        "name": "Acme Platform Team"
+      },
+      "category": "code-review",
+      "tags": ["review", "quality", "skill"]
+    }
+  ]
+}
