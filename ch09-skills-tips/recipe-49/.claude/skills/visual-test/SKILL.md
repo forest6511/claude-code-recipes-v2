@@ -5,7 +5,7 @@ description: >-
   Use when checking visual regression, layout issues, or UI validation.
 disable-model-invocation: true
 context: fork
-allowed-tools: mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, Read, Grep
+allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_snapshot mcp__playwright__browser_take_screenshot Read Grep
 ---
 
 # ビジュアルテスト

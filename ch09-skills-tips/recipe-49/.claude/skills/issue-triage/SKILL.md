@@ -4,7 +4,7 @@ description: >-
   Triages GitHub Issues by classifying type and setting priority.
   Use when organizing issues, setting labels, or prioritizing backlog.
 disable-model-invocation: true
-allowed-tools: mcp__github__get_issue, mcp__github__update_issue, mcp__github__add_issue_comment
+allowed-tools: mcp__github__get_issue mcp__github__update_issue mcp__github__add_issue_comment
 ---
 
 # Issue分類

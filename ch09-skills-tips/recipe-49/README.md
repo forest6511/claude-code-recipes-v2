@@ -1,18 +1,21 @@
-# レシピ51: Skills内でMCPサーバーのツールを指定する（ServerName:tool_name形式）
+# Recipe 49: MCP サーバー連携で Skills の機能拡張
 
-Skills内でMCPサーバーのツールを確実に呼び出すための完全修飾名の使い方です。
+Skills が MCP サーバーのツールを活用するためのサンプル。`allowed-tools` での MCP ツール許可、`mcp__<server>__<tool>` 命名規約、ワイルドカード許可、subagent 隔離での MCP 専有実行を扱う。
 
-## 含まれるファイル
+## 構成
 
-| ファイル | 説明 |
-|---------|------|
-| `issue-triage/SKILL.md` | GitHub MCPのツールを使ってIssueを分類するSkills |
-| `visual-test/SKILL.md` | Playwright MCPのツールを使ってビジュアルテストするSkills |
+```text
+recipe-49/
+├── .claude/
+│   └── skills/
+│       ├── issue-triage/SKILL.md         # GitHub MCP を使った Issue 分類
+│       └── visual-test/SKILL.md          # Playwright MCP を使ったビジュアルテスト
+└── README.md
+```
 
 ## ポイント
 
-1. **2つの形式の使い分け**:
-   - `SKILL.md`本文の指示: `ServerName:tool_name`（例: `GitHub:get_issue`）
-   - `allowed-tools`フィールド: `mcp__server__tool`（例: `mcp__github__get_issue`）
-2. **完全修飾名の必要性**: 複数のMCPサーバーが同名のツールを持つ場合に曖昧さを排除
-3. **ワイルドカード**: `mcp__github__*`でサーバー単位の一括許可が可能（ただし最小限推奨）
+- `allowed-tools` の MCP ツール表記は `mcp__<server>__<tool>` 形式（double underscore 区切り）
+- `mcp__github__*` のワイルドカードでサーバー単位の一括許可も可能（最小権限原則のため必要なツールだけ列挙が推奨）
+- SKILL.md 本文では `GitHub:get_issue` のような読みやすい表記でも構わない（強制ではない）
+- `context: fork` で skill を subagent に逃がすと、MCP ツール呼び出しが大量レスポンスを返してもメインコンテキストが汚染されない
