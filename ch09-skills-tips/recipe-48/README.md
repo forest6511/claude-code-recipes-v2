@@ -1,20 +1,26 @@
-# レシピ50: namespace設計 --- plugin:skill-nameパターンとプラグイン配布
+# Recipe 48: namespace 設計
 
-プラグインシステムを使ってSkillsにnamespace（名前空間）を付与し、名前の衝突を回避する方法です。
+複数の skill / subagent / plugin を同時に使うときの命名規約と priority 階層のサンプル。
 
-## 含まれるファイル
+## 構成
 
-| ファイル | 説明 |
-|---------|------|
-| `my-team-plugin/` | プラグインのディレクトリ構造サンプル |
-| `my-team-plugin/skills/review-code/SKILL.md` | チーム共通レビューSkills |
-| `my-team-plugin/skills/deploy/SKILL.md` | チーム共通デプロイSkills |
-| `my-team-plugin/skills/test-runner/SKILL.md` | チーム共通テストSkills |
-| `my-team-plugin/hooks/hooks.json` | プラグインのHooks設定 |
+```text
+recipe-48/
+├── my-team-plugin/                          # Plugin (acme-dev-tools)
+│   ├── .claude-plugin/
+│   │   └── plugin.json                      # name: acme-dev-tools (namespace prefix)
+│   ├── skills/
+│   │   ├── review-code/SKILL.md             # /acme-dev-tools:review-code
+│   │   ├── deploy/SKILL.md                  # /acme-dev-tools:deploy
+│   │   └── test-runner/SKILL.md             # /acme-dev-tools:test-runner
+│   ├── hooks/hooks.json
+│   └── scripts/lint-check.sh
+└── README.md
+```
 
 ## ポイント
 
-1. **namespaceの自動付与**: プラグイン名がprefixとして付く（例: `my-team-plugin:review-code`）
-2. **名前衝突の回避**: プラグインのSkillsとプロジェクト固有のSkillsが同名でも共存可能
-3. **`${CLAUDE_PLUGIN_ROOT}`**: プラグイン内のスクリプトパスを動的に解決する環境変数
-4. **優先順位**: エンタープライズ > 個人 > プロジェクト > プラグイン（namespace分離）
+- `plugin.json` の `name` (`acme-dev-tools`) がそのまま skill の namespace prefix になる
+- 同名 skill が project `.claude/skills/review-code/` にあっても、プラグインは別 namespace なので衝突しない
+- Personal `~/.claude/skills/` の同名 skill は project より優先される (priority 階層)
+- 組織 prefix (`acme-`) を全 plugin に適用すると、社内 skill が `/acme-*` で揃う

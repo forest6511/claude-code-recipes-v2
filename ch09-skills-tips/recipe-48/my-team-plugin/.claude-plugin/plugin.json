@@ -1,0 +1,8 @@
+{
+  "name": "acme-dev-tools",
+  "description": "Acme 社内チーム共通の開発支援プラグイン",
+  "version": "1.0.0",
+  "author": {
+    "name": "Acme Platform Team"
+  }
+}
