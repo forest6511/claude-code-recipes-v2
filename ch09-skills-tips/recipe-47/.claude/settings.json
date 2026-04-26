@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(code-review)",
+      "Skill(commit)"
+    ],
+    "deny": [
+      "Skill(deploy *)"
+    ]
+  },
+  "env": {
+    "SLASH_COMMAND_TOOL_CHAR_BUDGET": "12000"
+  }
+}
