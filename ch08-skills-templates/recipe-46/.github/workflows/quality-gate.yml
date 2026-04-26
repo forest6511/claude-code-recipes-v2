@@ -1,0 +1,39 @@
+name: Quality Gate
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "/security-scan-all"
+          claude_args: "--output-format json"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Parse and gate
+        run: |
+          critical=$(jq -r '.summary.critical' result.json)
+          high=$(jq -r '.summary.high' result.json)
+          if [ "$critical" -gt 0 ] || [ "$high" -gt 0 ]; then
+            echo "Blocking: Critical=$critical High=$high"
+            exit 1
+          fi
+
+  autofix:
+    needs: scan
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "/autofix-bounded lint と型エラーのみ"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
