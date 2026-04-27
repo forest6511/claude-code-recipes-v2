@@ -1,0 +1,15 @@
+{
+  "cleanupPeriodDays": 7,
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/svn-worktree.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
