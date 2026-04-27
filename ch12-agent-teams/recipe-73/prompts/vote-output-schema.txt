@@ -1,0 +1,19 @@
+各サブエージェントは以下の JSON 形式で結論を返してください:
+
+{
+  "agent_id": "<サブエージェント名>",
+  "verdict": "<結論を 1 文で>",
+  "category": "<事前定義カテゴリのいずれか>",
+  "confidence": 0.0 から 1.0,
+  "evidence": ["<根拠 1>", "<根拠 2>", "<根拠 3>"]
+}
+
+事前定義カテゴリ:
+- session-state-bug
+- network-timeout
+- auth-token-expiry
+- memory-pressure
+- other
+
+メイン会話で 3 件の JSON を集計し、(1) category 別の票数 (2) 平均 confidence
+(3) 全 evidence のユニーク件数、を Markdown テーブルで提示してください。

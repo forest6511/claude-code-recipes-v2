@@ -1,55 +1,37 @@
-# レシピ77: 専門ロールパターン（PM/Architect/Developer/QA）
+# レシピ73: Votingパターン（合意形成）
 
-PM、Architect、Developer、QAの4つの専門ロールをカスタムサブエージェントとして定義し、開発プロセス全体をカバーします。チェーン方式とAgent Teamsの両方で活用できます。
+独立した複数エージェントに同じ問題を解かせ、結果の一致度から信頼性を測る合意形成パターンです。多数決・全会一致・重み付け投票を使い分け、合意不成立時のエスカレートまで含めて設計します。
 
 ## ファイル一覧
 
-| ファイル | 説明 |
-|---------|------|
-| `.claude/agents/pm-agent.md` | プロダクトマネージャー（要件定義・仕様書作成） |
-| `.claude/agents/architect-agent.md` | ソフトウェアアーキテクト（技術設計・設計判断） |
-| `.claude/agents/developer-agent.md` | 開発者（コード実装・ユニットテスト） |
-| `.claude/agents/qa-agent.md` | QAエンジニア（テスト設計・品質検証） |
-| `prompts/chain-workflow.txt` | チェーン方式での活用プロンプト例 |
-| `prompts/team-workflow.txt` | Agent Teamsでの並列活用プロンプト例 |
+- `prompts/parallel-vote.txt` — サブエージェント 3 件並列の独立投票
+- `prompts/adversarial-debate.txt` — Agent Teams 5 仮説の敵対的議論
+- `prompts/vote-output-schema.txt` — 投票結果の JSON スキーマ
+- `prompts/voting-strategy.txt` — 多数決 / 全会一致 / 重み付けの戦略選択
+- `prompts/escalation-rule.txt` — 合意不成立時のエスカレート規則
+- `.claude/hooks/log-vote.sh` — `SubagentStop` で各投票を JSON Lines にログ
+- `.claude/settings.json` — `SubagentStop` Hook 登録
 
-## 使い方
+## 投票方式
 
-```bash
-# エージェント定義をプロジェクトにコピー
-cp -r .claude /path/to/your-project/
+- **多数決**: 3 件中 2 件以上の同意で採用
+- **全会一致**: 全件同意で採用、それ以外はエスカレート
+- **重み付け**: confidence × 票で順位付け
 
-# チェーン方式: 順次実行
-> ユーザープロフィール編集機能を実装してください。
-> 以下の順序で各専門エージェントを使ってください:
-> 1. pm-agentで仕様書を作成する
-> 2. 仕様書を確認させてください（中間ゲート）
-> 3. architect-agentで技術設計を行う
-> 4. developer-agentで実装する
-> 5. qa-agentでテストと品質検証を行う
+## 適用領域
 
-# Agent Teams方式: 依存関係付き並列
-> エージェントチームを作成して、PM → Architect → Developer → QA
-> の依存関係で開発を進めてください
-```
+- バグ調査 (複数仮説からの根本原因特定)
+- コードレビュー (severity 判定の偽陽性削減)
+- 設計判断のクロスチェック (高リスク決定前)
 
-## ロール一覧
+## 不向きな問題
 
-| ロール | モデル | 主な責務 |
-|--------|--------|----------|
-| PM | Sonnet | ユーザーストーリー作成、受け入れ基準定義、仕様書作成 |
-| Architect | Sonnet | 技術設計、コンポーネント設計、技術的負債の評価 |
-| Developer | Sonnet | コード実装、ユニットテスト作成、自己レビュー |
-| QA | Sonnet | テストケース設計・実行、エッジケース特定、品質レポート |
-
-## 設計のポイント
-
-- `memory: project`を設定したPMとArchitectは過去の仕様・設計判断を蓄積する
-- 小規模タスクでは4ロール全てを使う必要はない（PM+QAのみでも有効）
-- DevとQAの間にフィードバックループを設けると品質が向上する
+- 価値判断 (アーキテクチャ選択など正解がない問題)
+- カテゴリ事前定義が困難な自由記述問題
 
 ## 関連レシピ
 
-- レシピ59「カスタムエージェントを定義する」
-- レシピ64「Prompt Chainingと中間ゲート設計」
-- レシピ92「Spec駆動開発ワークフロー」
+- レシピ60「並列実行で大規模コードベースを高速調査」
+- レシピ65「Agent Teams基礎」
+- レシピ72「Map-Reduceパターン（分散実行と統合）」
+- レシピ75「Agent Teams の evals / observability を計測する」

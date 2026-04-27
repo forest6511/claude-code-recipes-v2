@@ -1,0 +1,13 @@
+以下の問題について、3 つの独立したサブエージェントに同じ問題を投げ、
+各々の回答を比較してください:
+
+問題: src/auth/session.ts の getSession() が intermittent に null を
+返す現象の根本原因を 1 つ特定する
+
+サブエージェント:
+1. researcher-a: コードベース調査 (Read/Grep/Glob のみ)
+2. researcher-b: コードベース調査 (Read/Grep/Glob のみ)
+3. researcher-c: コードベース調査 (Read/Grep/Glob のみ)
+
+各サブエージェントには「他の調査者の結果は参照しない」と指示し、
+完了後にメイン会話で 3 つの結論を比較してください。
