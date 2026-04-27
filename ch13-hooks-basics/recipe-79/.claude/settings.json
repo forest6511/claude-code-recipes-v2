@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/lint-with-disk.sh",
+            "asyncRewake": true,
+            "timeout": 300,
+            "statusMessage": "ESLint scanning..."
+          }
+        ]
+      }
+    ]
+  }
+}
