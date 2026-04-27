@@ -1,0 +1,26 @@
+task:
+  id: fix-auth-bypass-001
+  desc: Fix authentication bypass when password field is empty
+  team_size: 3
+  team_composition:
+    - role: architect
+      model: opus
+    - role: implementer
+      model: sonnet
+    - role: tester
+      model: sonnet
+  graders:
+    - type: deterministic_tests
+      required:
+        - tests/test_empty_pw_rejected.py
+        - tests/test_null_pw_rejected.py
+    - type: state_check
+      expect:
+        files_changed_min: 1
+        files_changed_max: 4
+    - type: llm_rubric
+      rubric: prompts/code_quality.md
+  tracked_metrics:
+    - n_total_tokens
+    - n_teammate_messages
+    - cost_per_model
