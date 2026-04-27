@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Notebook",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/log-notebook.sh" }
+        ]
+      },
+      {
+        "matcher": "^(Edit|Write|NotebookEdit)$",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/log-mutations.sh" }
+        ]
+      }
+    ]
+  }
+}

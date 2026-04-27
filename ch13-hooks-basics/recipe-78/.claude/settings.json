@@ -4,48 +4,13 @@
       {
         "matcher": "Bash",
         "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/validate-bash.sh"
-          }
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/audit-bash.sh" }
         ]
       },
       {
-        "matcher": "Edit|Write",
+        "matcher": "Edit|Write|MultiEdit",
         "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-files.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "mcp__memory__.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'Memory MCPが使用されました' >> ~/mcp-operations.log"
-          }
-        ]
-      },
-      {
-        "matcher": "mcp__.*__write.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/validate-mcp-write.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'リマインダー: npmではなくBunを使用。コミット前にbun testを実行。現在のスプリント: 認証リファクタリング'"
-          }
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/audit-write.sh" }
         ]
       }
     ]

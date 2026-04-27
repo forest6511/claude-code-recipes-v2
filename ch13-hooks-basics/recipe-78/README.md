@@ -1,31 +1,28 @@
-# レシピ81: マッチャーパターンでツールをフィルタリングする
+# レシピ78: マッチャーパターンでツールをフィルタリング
 
-マッチャーの正規表現パターンの実践例です。
+公式 `hooks.md` の Matcher patterns 節が定義する 3 評価ルール（完全一致 / `|` 区切り完全一致リスト / JavaScript 正規表現）と、event ごとの matcher 対象フィールドを使い分ける最小例セットです。
 
-## 含まれるファイル
+## ファイル一覧
 
-- `.claude/settings.json` — 複数のマッチャーグループ設定例
+- `.claude/settings.json` — 基本: tool 名での完全一致と `|` 区切り
+- `examples/settings-mcp.json` — MCP ツール (`mcp__server__.*` 必須)
+- `examples/settings-regex.json` — 正規表現 anchor (`^Notebook` / `^(...)$`)
+- `examples/settings-non-tool.json` — SessionStart / ConfigChange / Notification など非 tool 系
+- `examples/settings-multi-group.json` — 同 event 内の複数 matcher group は OR
 
-## 主なパターン
+## matcher 評価ルール (3 種)
 
-| パターン | マッチ対象 | 説明 |
-|---------|----------|------|
-| `Bash` | Bashのみ | 完全一致 |
-| `Edit\|Write` | EditまたはWrite | OR演算子 |
-| `Notebook.*` | NotebookEditなど | 前方一致 |
-| `mcp__.*` | 全MCPサーバーのツール | MCP経由の全ツール |
-| `mcp__github__.*` | GitHub MCPの全ツール | 特定MCPサーバー |
-| `mcp__.*__write.*` | 任意MCPのwrite系 | サーバー横断 |
+- `"*"` / `""` / 省略 → 全マッチ
+- 英数字・`_`・`|` のみ → 完全一致または `|` 区切りリスト
+- それ以外の文字を含む → JavaScript 正規表現
 
-## イベント別マッチ対象
+## MCP tool マッチングの落とし穴
 
-| イベント | マッチ対象 |
-|---------|-----------|
-| `PreToolUse`等 | ツール名 |
-| `SessionStart` | `startup`, `resume`, `clear`, `compact` |
-| `SessionEnd` | `clear`, `logout`, `prompt_input_exit`, `bypass_permissions_disabled`, `other` |
-| `Notification` | `permission_prompt`, `idle_prompt`, `auth_success`, `elicitation_dialog` |
-| `SubagentStart/Stop` | `Bash`, `Explore`, `Plan`, カスタム名 |
-| `PreCompact` | `manual`, `auto` |
+- `mcp__memory` は完全一致扱いで誰にもマッチしない
+- サーバー全体は `mcp__memory__.*` (末尾 `.*` 必須)
 
-詳細は書籍「Claude Code実践レシピ」第13章を参照してください。
+## 関連
+
+- レシピ76「20+ Hooks イベント完全マップ」
+- レシピ77「settings.jsonでHooks定義 + Conditional Hooks」
+- レシピ79「Hooksのデバッグ + 大出力ディスク永続化」
