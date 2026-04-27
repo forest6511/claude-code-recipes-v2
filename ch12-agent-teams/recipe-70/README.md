@@ -1,46 +1,46 @@
-# レシピ74: バックグラウンド実行と結果監視（Ctrl+B）
+# レシピ70: バックグラウンド実行
 
-Ctrl+Bでタスクをバックグラウンドに切り替え、複数のタスクを並行で管理します。バックグラウンド実行の制約、結果確認、Agent Teamsでの監視パターンを解説します。
+サブエージェントや Bash タスクをバックグラウンドで実行し、メイン会話をブロックせずに長時間処理を進めるパターンの例です。`background: true` 指定、`Ctrl+B`、事前承認モデル、SubagentStop Hooks 通知を扱います。
 
 ## ファイル一覧
 
-| ファイル | 説明 |
-|---------|------|
-| `prompts/background-usage.txt` | バックグラウンド実行の使い方と結果確認のプロンプト例 |
-| `prompts/monitoring-patterns.txt` | Agent Teamsでの監視パターン（キーバインド一覧） |
+- `.claude/agents/long-test-runner.md`: `background: true` を持つ長時間テスト実行サブエージェント定義
+- `.claude/settings.json`: SubagentStop で macOS 通知を送る Hook 設定例
+- `prompts/background-usage.txt`: バックグラウンド実行の使い方と結果確認のプロンプト例
+- `prompts/monitoring-patterns.txt`: Agent Teams での監視パターン（キーバインド一覧）
 
 ## 使い方
 
+### 自動でバックグラウンド起動する
+
+`.claude/agents/long-test-runner.md` を配置すると、`long-test-runner` を起動するたびに毎回バックグラウンド実行になります。
+
+```text
+> long-test-runner サブエージェントで E2E テストを実行してください
+```
+
+### 走行中に背景化する
+
+`background: true` を設定していないサブエージェントでも、走行中に `Ctrl+B` を押すとその時点でバックグラウンドに切り替えられます。Bash タスクも同様です。
+
+### 全体で無効化する
+
 ```bash
-# 方法1: 事前にバックグラウンド指定
-> テストをバックグラウンドで実行して
-
-# 方法2: 実行中にCtrl+Bで切り替え
-# サブエージェントの実行中にCtrl+Bを押す
-
-# バックグラウンドタスクを完全に無効化する場合
 export CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1
 ```
 
-## バックグラウンド実行の制約
+`background: true` も `Ctrl+B` も `run_in_background` パラメータも含めて、すべての背景化機能が無効になります。CI のヘッドレス環境向け。
 
-| 適する | 適さない |
-|--------|----------|
-| テスト実行、リンター、静的解析 | DB接続が必要なE2Eテスト（MCPサーバーのツール不可） |
-| ファイル検索、コードベース調査 | ユーザーの判断が必要な操作 |
-| ドキュメント生成、コメント追加 | 権限の事前取得が困難な操作 |
+## 進捗確認
 
-## Agent Teamsの監視キーバインド
-
-| キー | 動作 |
-|------|------|
-| Shift+上下 | チームメイトを選択して出力を確認 |
-| Enter | チームメイトのセッションを展開 |
-| Escape | チームメイトの現在のターンを中断 |
-| Ctrl+T | タスクリスト表示 |
+- `/agents` の Running タブに走行中のバックグラウンドサブエージェントが表示される
+- `Shift+Down` でサブエージェントをサイクル
+- `Enter` で個別セッションを開いて中間出力を確認
+- `@agent-<name>` の typeahead で追加メッセージを送信
 
 ## 関連レシピ
 
-- レシピ65「テスト実行とレポート集約（バックグラウンド実行）」
-- レシピ69「Agent Teamsの基本」
-- レシピ87「タスク完了時にデスクトップ/サウンド通知を自動送信する」
+- レシピ55「Taskツールの仕組みと独立コンテキスト」
+- レシピ63「テスト実行とレポート集約（バックグラウンド）」
+- レシピ85「Notification通知 + sessionTitle」
+- レシピ88「Stop Hooks」
