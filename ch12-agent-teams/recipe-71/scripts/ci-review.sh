@@ -1,22 +1,22 @@
-#!/bin/bash
-# ci-review.sh - PRの自動レビュースクリプト
+#!/usr/bin/env bash
 # 使い方: ./ci-review.sh <PR番号>
-
 set -euo pipefail
 
-PR_NUMBER=${1:?"Usage: $0 <PR_NUMBER>"}
+PR_NUMBER="${1:?Usage: $0 <PR_NUMBER>}"
 
 claude --agents '{
   "security-checker": {
-    "description": "セキュリティ脆弱性を検査する。",
-    "prompt": "変更されたファイルのセキュリティ脆弱性を検査し、CVSSスコア付きで報告してください。",
+    "description": "セキュリティ脆弱性の検査専門。",
+    "prompt": "変更ファイルの脆弱性を CVSS スコア付きで報告してください。",
     "tools": ["Read", "Grep", "Glob", "Bash"],
     "model": "sonnet"
   },
   "test-validator": {
-    "description": "テストカバレッジを検証する。",
-    "prompt": "変更されたコードのテストカバレッジを検証し、不足しているテストケースを報告してください。",
+    "description": "テストカバレッジ検証専門。",
+    "prompt": "変更コードのカバレッジを検証し、不足するテストケースを列挙してください。",
     "tools": ["Read", "Grep", "Glob", "Bash"],
     "model": "haiku"
   }
-}' -p "PR #${PR_NUMBER}のコード変更をレビューしてください。security-checkerとtest-validatorの両方を並列で実行してください。"
+}' \
+  -p "PR #${PR_NUMBER} のコード変更をレビューしてください。security-checker と test-validator の両方を並列に実行してください。" \
+  --output-format json

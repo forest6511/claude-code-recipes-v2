@@ -1,0 +1,8 @@
+{
+  "doc-extractor": {
+    "description": "ソースコードからドキュメントを抽出する専門。",
+    "prompt": "公開 API のシグネチャと docstring を抽出し、Markdown のリファレンスを生成してください。",
+    "tools": ["Read", "Grep", "Glob", "Write"],
+    "model": "sonnet"
+  }
+}

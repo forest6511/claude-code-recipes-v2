@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "deny": ["Agent(security-checker)"]
+  }
+}
