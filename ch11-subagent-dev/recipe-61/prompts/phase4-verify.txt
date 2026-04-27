@@ -1,0 +1,3 @@
+worktree-step-1 から worktree-step-5 のブランチを順に main にマージし、
+各マージ後に `npm test` を実行してください。1 つでも fail したら、
+その時点でマージを止めて原因を legacy-analyzer に再分析させてください。
