@@ -1,55 +1,37 @@
-# レシピ69: Agent Teamsの基本 --- リーダー・チームメイトの仕組み
+# レシピ65: Agent Teams基礎
 
-Agent Teamsを有効化し、リーダー・チームメイト構成でタスクを分担します。有効化方法、アーキテクチャの概要、表示モードの設定を解説します。
+Agent Teams（実験的機能）を有効化し、リーダー1名・チームメイト複数名・共有タスクリスト・メッセージングという最小構成でチームを起動する例です。
 
 ## ファイル一覧
 
-| ファイル | 説明 |
-|---------|------|
-| `settings.json` | Agent Teamsを有効化する`settings.json`設定 |
-| `prompts/team-creation.txt` | チーム構成の指示プロンプト例 |
+- `settings.json`: Agent Teams を有効化するプロジェクト設定例
+- `prompts/team-creation.txt`: 3人構成のチームを作成するプロンプト例
+
+## 前提条件
+
+- Claude Code v2.1.32 以降
+- in-process モードのみで利用する場合は追加ツール不要
+- split panes モードを使う場合は `tmux` または iTerm2 + `it2` CLI が必要
 
 ## 使い方
 
-```bash
-# Agent Teamsを有効化（settings.jsonをプロジェクトに配置）
-cp settings.json /path/to/your-project/.claude/settings.json
-
-# または環境変数で有効化
-export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-
-# 表示モードの指定（CLIフラグ）
-claude --teammate-mode in-process
-```
-
-## アーキテクチャ
-
-```
-リーダー（Team Lead）
-  - メインのClaude Codeセッション
-  - チームの作成、タスクの割り当て、結果の統合を担当
-
-チームメイト（Teammates）
-  - 独立したClaude Codeインスタンス
-  - それぞれ独自のコンテキストウィンドウを持つ
-  - チームメイト同士で直接メッセージ交換が可能
-
-共有タスクリスト（Task List）
-  - 全メンバーが参照・更新できる作業項目リスト
-
-メールボックス（Mailbox）
-  - エージェント間のメッセージングシステム
-```
+1. `settings.json` をプロジェクトの `.claude/settings.json` に配置するか、`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` を環境変数として設定する
+2. リーダーセッションで `claude` を起動する
+3. `prompts/team-creation.txt` の内容をリーダーに送り、3人のチームメイト構成でチームを作る
+4. Shift+Down でチームメイト間をサイクルし、Enter でセッションに入って状況を確認する
+5. 作業終了時はリーダーに `Clean up the team` と依頼する
 
 ## 表示モード
 
-| モード | 説明 |
-|--------|------|
-| `in-process`（デフォルト） | 全チームメイトがメインターミナル内で動作。Shift+上下キーでチームメイト選択 |
-| `tmux`（split panes） | 各チームメイトが独立ペインで動作。tmuxまたはiTerm2が必要 |
+`teammateMode` の値は次の3つです。
+
+- `auto`（デフォルト）: tmux セッション内で起動した場合のみ split panes、それ以外は in-process
+- `in-process`: 全チームメイトをメインターミナル内に配置する
+- `tmux`: split panes を強制する。tmux または iTerm2 が必要
 
 ## 関連レシピ
 
-- レシピ57「Taskツールの仕組みと独立コンテキスト」
-- レシピ71「共有タスクリストと依存関係管理」
-- レシピ78「コスト最適化パターン」
+- レシピ55「Taskツールの仕組みと独立コンテキスト」
+- レシピ60「並列実行で大規模コードベースを高速調査」
+- レシピ67「共有タスクリストと自律スケジューリング」
+- レシピ74「70/20/10 Advisor でチームコスト最適化」
