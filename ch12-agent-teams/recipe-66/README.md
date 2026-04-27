@@ -1,45 +1,36 @@
-# レシピ70: フロントエンド+バックエンド+テストの並列チーム開発
+# レシピ66: 並列レイヤー開発（複数パッケージ同時）
 
-Agent Teamsで各層を担当するチームメイトを配置し、並列で開発を進めます。ファイル分離の原則、チームメイト間のコミュニケーション、plan approvalによる品質担保のパターンを解説します。
+Agent Teams で各レイヤー（フロントエンド・バックエンド・テスト）を担当するチームメイトを配置し、ファイル衝突を避けつつ並列に開発を進めるパターンの例です。レイヤー間の契約共有、plan approval、TaskCompleted Hook による衝突検出を扱います。
 
 ## ファイル一覧
 
-| ファイル | 説明 |
-|---------|------|
-| `prompts/parallel-dev.txt` | 3層並列チーム開発の指示プロンプト例 |
-| `prompts/plan-approval.txt` | plan approvalで品質を担保するプロンプト例 |
+- `prompts/parallel-dev.txt`: 3層並列チーム開発の指示プロンプト例
+- `prompts/plan-approval.txt`: plan approval で品質を担保するプロンプト例
+- `.claude/settings.json`: TaskCompleted Hook の設定例
+- `.claude/hooks/check-task-completion.sh`: バックエンドタスク完了時に型チェックを走らせる Hook スクリプト
+- `.claude/agents/backend-architect.md`: バックエンドレイヤー特化型サブエージェント定義の例
 
 ## 使い方
 
-```bash
-# Agent Teamsを有効化した状態で以下のプロンプトを使用
-# （有効化方法はレシピ69を参照）
+1. `.claude/settings.json` をプロジェクトに配置するか、`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` を環境変数として設定する
+2. リーダーセッションで `claude` を起動する
+3. `prompts/parallel-dev.txt` の内容をリーダーに送り、3レイヤー構成のチームを作る
+4. 高リスクなタスクには `prompts/plan-approval.txt` の指示を追加する
+5. バックエンドタスクが完了するたびに、Hook が型チェックを実行する
 
-# Claude Codeに並列チーム開発を指示
-> ユーザー管理機能を実装します。エージェントチームを作成してください:
-> - バックエンド担当: src/api/ にREST APIエンドポイントを実装
-> - フロントエンド担当: src/components/ にReactコンポーネントを実装
-> - テスト担当: tests/ にユニットテストとE2Eテストを作成
-```
+## ファイル分割の原則
 
-## ファイル分離の原則
+担当ディレクトリの分割例は次のとおりです。
 
-```
-安全な分担の例:
-  バックエンド   → src/api/, src/models/, src/services/
-  フロントエンド → src/components/, src/hooks/, src/pages/
-  テスト         → tests/unit/, tests/e2e/, tests/fixtures/
-
-危険な分担の例:
-  バックエンド   → src/api/users.ts
-  フロントエンド → src/api/users.ts  ← 同じファイルを2人が編集
-  → コンフリクトが発生する
-```
+- バックエンド: `src/api/`, `src/models/`, `src/services/`
+- フロントエンド: `src/components/`, `src/hooks/`, `src/pages/`
+- テスト: `tests/unit/`, `tests/e2e/`, `tests/fixtures/`
 
 2人のチームメイトが同じファイルを編集すると上書きが発生します。各チームメイトが担当するファイルセットを明示的に分離してください。
 
 ## 関連レシピ
 
-- レシピ69「Agent Teamsの基本」
-- レシピ71「共有タスクリストと依存関係管理」
-- レシピ72「Git Worktreeで安全な並列ブランチ開発」
+- レシピ65「Agent Teams基礎」
+- レシピ67「共有タスクリストと自律スケジューリング」
+- レシピ68「native isolation: worktree でブランチ分離」
+- レシピ70「バックグラウンド実行」
