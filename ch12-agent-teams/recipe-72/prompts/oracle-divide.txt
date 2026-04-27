@@ -1,0 +1,10 @@
+self-compiler/ ディレクトリのコンパイラがビルドする object ファイル群を
+GCC でコンパイルした参照出力と比較し、差分があるファイルだけを
+独立タスクとしてチームメイトに振り分けてください。
+
+手順:
+1. 参照ビルド: gcc -c <file>.c -o ref/<file>.o（全ファイル）
+2. 候補ビルド: ./self-compiler -c <file>.c -o cand/<file>.o
+3. ref/ と cand/ を 1 ファイルずつ diff し、差分があるファイルを
+   tasks/diff-<file>.txt に記録
+4. 各 diff-*.txt をチームメイトのタスクとして共有タスクリストへ登録

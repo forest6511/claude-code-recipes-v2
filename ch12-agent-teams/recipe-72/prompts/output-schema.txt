@@ -1,0 +1,19 @@
+各サブエージェントは以下の JSON 形式でレポートを返してください:
+
+{
+  "group": "<担当グループ名>",
+  "summary": "<3 行以内の概要>",
+  "issues": [
+    {
+      "file": "<相対パス>",
+      "line": <行番号>,
+      "severity": "critical" | "high" | "medium" | "low",
+      "category": "<カテゴリ>",
+      "description": "<問題の説明>",
+      "suggestion": "<推奨修正>"
+    }
+  ]
+}
+
+メインの会話では各グループの JSON を集約し、severity と category の
+クロス集計を Markdown テーブルで提示してください。

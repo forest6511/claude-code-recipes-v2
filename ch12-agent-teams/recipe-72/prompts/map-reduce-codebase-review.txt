@@ -1,0 +1,11 @@
+src/ 配下の TypeScript コードを並列でレビューしてください。
+分割は以下のディレクトリ単位:
+
+- Group A: src/api/ + src/services/
+- Group B: src/components/ + src/hooks/
+- Group C: src/utils/ + src/types/
+
+各グループに code-reviewer サブエージェントを 1 つ起動し、
+同じレビュー基準（型安全性 / 未使用エクスポート / 公開 API の一貫性）で
+分析してください。完了後、3 つの結果を統合し、グループ横断で
+共通する問題と各グループ固有の問題に分けて報告してください。
