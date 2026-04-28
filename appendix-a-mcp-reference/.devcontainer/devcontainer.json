@@ -1,0 +1,12 @@
+{
+  "name": "claude-code-dev",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code",
+  "mounts": [
+    "source=${localEnv:HOME}/.claude.json,target=/root/.claude.json,type=bind,consistency=cached"
+  ],
+  "containerEnv": {
+    "BRAVE_API_KEY": "${localEnv:BRAVE_API_KEY}",
+    "DATABASE_URL": "${localEnv:DATABASE_URL}"
+  }
+}

@@ -1,0 +1,19 @@
+name: Claude batch
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-5"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g @anthropic-ai/claude-code
+      - name: Run headless
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          claude --bare -p "今週マージされたPRをまとめて" \
+            --output-format json

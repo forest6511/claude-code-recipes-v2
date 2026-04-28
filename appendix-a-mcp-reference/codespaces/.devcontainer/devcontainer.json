@@ -1,0 +1,5 @@
+{
+  "name": "codespaces-claude",
+  "image": "mcr.microsoft.com/devcontainers/universal:linux",
+  "postCreateCommand": "bash .devcontainer/setup.sh"
+}
