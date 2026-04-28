@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(rm -rf *)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-rm-rf.sh"
+          },
+          {
+            "type": "command",
+            "if": "Bash(git push --force*)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-force-push.sh"
+          },
+          {
+            "type": "command",
+            "if": "Bash(curl *)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-curl-pipe-bash.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
