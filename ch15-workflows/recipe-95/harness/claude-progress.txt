@@ -1,0 +1,7 @@
+## 2026-04-28 セッション3
+機能: 新規チャットボタン
+実装: components/Sidebar/NewChatButton.tsx 追加。zustand の chatStore に createChat アクション追加。
+既知の問題: ブラウザ alert モーダルは Puppeteer で見えないので、確認ダイアログは alert() でなく
+            DOM ベースのモーダル (Modal.tsx) で実装した。
+次の人への申し送り: feature #12 (チャット履歴のサイドバー表示) は createChat の発火順を
+                    要確認。Date.now() でなく nanoid で id 振り直す予定。
