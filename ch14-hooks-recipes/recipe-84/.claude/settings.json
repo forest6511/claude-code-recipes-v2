@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "FileChanged": [
+      {
+        "matcher": ".env|.envrc|.tool-versions",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/reload-env.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "package.json|pnpm-lock.yaml|yarn.lock",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/notify-deps-change.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
