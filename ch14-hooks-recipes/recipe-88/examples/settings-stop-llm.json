@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "あなたは Claude が停止してよいか判定するレビュアーです。Context: $ARGUMENTS\n\nlast_assistant_message を見て、ユーザーの要求に対して曖昧な完了報告（「だいたい完了」「主要部分は実装」「テストは省略」など）になっていないか確認します。曖昧なら {\"ok\": false, \"reason\": \"要点を明確化または残タスクを完了\"} を返し、明確なら {\"ok\": true} を返します。",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

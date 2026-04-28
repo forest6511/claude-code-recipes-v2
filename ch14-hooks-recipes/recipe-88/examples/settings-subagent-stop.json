@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SubagentStop": [
+      {
+        "matcher": "code-reviewer|test-runner",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/log-subagent-result.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
