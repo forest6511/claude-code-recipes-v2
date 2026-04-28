@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(gh issue view *)",
+      "Bash(gh pr view *)",
+      "Read",
+      "Edit"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_DEBUG_LOG_LEVEL": "info"
+  },
+  "model": "claude-sonnet-4-6"
+}
