@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | xargs -I{} sh -c 'npx prettier --write \"{}\" 2>/dev/null; npx eslint --fix \"{}\" 2>/dev/null || true'",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "今のターンでコードファイル(.ts/.tsx/.js/.py)を編集したか確認してください。編集していて品質ゲート(/quality-gate)を未実行なら{\"ok\":false,\"reason\":\"/quality-gate を実行してから完了してください\"}、それ以外は{\"ok\":true}を返してください。\n\n入力:\n$ARGUMENTS"
+          }
+        ]
+      }
+    ]
+  }
+}

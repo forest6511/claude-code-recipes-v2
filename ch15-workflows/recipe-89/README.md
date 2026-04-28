@@ -1,29 +1,18 @@
-# レシピ91: MCP+Skills+Hooksで作る品質ゲートパイプライン
+# レシピ89: MCP+Skills+Hooks 品質ゲートパイプライン
 
-MCP（外部ツール連携）、Skills（再利用可能な手順）、Hooks（自動トリガー）を組み合わせて、「生成→評価→改善」を自動で反復する品質ゲートパイプラインを構築します。Stop Hooksでタスク完了時に品質チェックを自動起動し、結果をGitHub Issueに記録します。
+PostToolUse Hook（編集直後の format/lint）、Stop Hook + Skills（ターン終了時の typecheck/test/audit）、Code Review managed service + REVIEW.md（PR 提出時の最終レビュー）を 3 層に重ねる構成のサンプルです。
 
 ## ファイル一覧
 
-| ファイル | 説明 |
-|---------|------|
-| `quality-gate-SKILL.md` | 品質ゲート実行Skills（lint・型チェック・テスト・セキュリティスキャン） |
-| `post-review-SKILL.md` | レビュー結果をGitHub Issueに記録するSkills |
-| `settings.json` | Stop Hooksでタスク完了時に品質ゲートを自動トリガーする設定 |
-
-## 配置先
-
-```
-.claude/
-├── skills/
-│   ├── quality-gate/
-│   │   └── SKILL.md          ← quality-gate-SKILL.md
-│   └── post-review/
-│       └── SKILL.md          ← post-review-SKILL.md
-└── settings.json             ← settings.json（またはsettings.local.json）
-```
+- `.claude/settings.json`: Layer 1（PostToolUse の Edit|Write matcher で Prettier+ESLint）と Layer 2（Stop の prompt 型 hook で品質ゲート未実行時にブロック）
+- `.claude/skills/quality-gate/SKILL.md`: `disable-model-invocation: true` で `/quality-gate` 専用 Skills として明示起動
+- `REVIEW.md`: Code Review managed service への severity 定義・nit cap・必須チェック項目
+- `.github/workflows/severity-gate.yml`: check run 完了時に `bughunter-severity` を読み出し、Important が 1 件以上なら CI を fail させる severity ゲート
 
 ## 使い方
 
-1. 各ファイルを上記の配置先にコピーする
-2. 手動実行: `/quality-gate` でSkillsを呼び出す
-3. 自動実行: コード変更を含むタスク完了時にStop Hooksが自動的に品質チェックを促す
+1. Claude Code v2.1 系で `.claude/settings.json` を読み込ませる（プロジェクトスコープ推奨）
+2. `/quality-gate` で Skills を明示起動。コード変更ありのターン終了で Stop Hook が起動を促す
+3. PR 提出後、Code Review が REVIEW.md に従ってインライン指摘。`severity-gate.yml` が Important 件数で CI を gate
+
+詳細は本書のレシピ89を参照。
