@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "ユーザープロンプトに本番環境への破壊的指示が含まれていないかチェック。Context: $ARGUMENTS\n\n破壊的（DROP TABLE production / rm -rf 本番ディレクトリ / git push --force main 等）なら {\"ok\": false, \"reason\": \"破壊的操作\"}、無害なら {\"ok\": true}",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "ユニットテスト suite を実行し、すべて通っているかを確認します。$ARGUMENTS\n\n手順: 1) `pnpm test` または `npm test` でテストを起動 2) 失敗があれば失敗ファイル名と簡潔な原因を抽出 3) すべて成功なら {\"ok\": true} を返し、失敗があれば {\"ok\": false, \"reason\": \"<失敗サマリ>\"} を返す",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}
