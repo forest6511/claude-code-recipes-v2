@@ -1,0 +1,25 @@
+name: migration-batch
+on:
+  workflow_dispatch:
+    inputs:
+      glob:
+        description: "対象ファイル glob"
+        required: true
+        default: "src/legacy/**/*.ts"
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Migrate batch
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          for f in $(find ${{ github.event.inputs.glob }} -type f); do
+            claude --bare -p "Migrate $f from React class component to hooks. Return OK on success, FAIL with reason on error." \
+              --allowedTools "Edit Read Bash(npm test)" \
+              --output-format json | tee -a results.jsonl
+          done
+          jq -r 'select(.result | startswith("FAIL")) | .session_id + ": " + .result' results.jsonl
