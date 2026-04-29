@@ -1,19 +1,19 @@
-# Claude Code 実践レシピ100本 — v5 サンプルコードリポジトリ
+# Claude Code 実践レシピ100本 — 第2版 サンプルコードリポジトリ
 
 [書籍名] **Claude Code 実践レシピ100本 〜MCP / Skills / Hooks / サブエージェント実践ガイド〜**
 
-本リポジトリは、書籍『Claude Code 実践レシピ100本』の **第2版（v5）** に対応するサンプルコード集です。
+本リポジトリは、書籍『Claude Code 実践レシピ100本』の **第2版** に対応するサンプルコード集です。
 
 ## リポジトリの位置づけ
 
-- **v2 (このリポ)** — 第2版（v5）向け。MCP / Skills / Hooks / サブエージェント / Agent Teams / Channels / Computer Use / Routines など最新機能を反映した100レシピ
-- **v1** — [forest6511/claude-code-recipes](https://github.com/forest6511/claude-code-recipes) — 初版（v4）向け。2026-02 出版時点のサンプルコード
+- **本リポジトリ** — 第2版向け。MCP / Skills / Hooks / サブエージェント / Agent Teams / Channels / Computer Use / Routines など最新機能を反映した100レシピ
+- **初版用リポジトリ** — [forest6511/claude-code-recipes](https://github.com/forest6511/claude-code-recipes) — 初版（2026-02 出版）時点のサンプルコード
 
-初版書籍をお持ちの読者は **v1 リポ**、第2版の読者は本リポ（v2）を参照してください。
+初版書籍をお持ちの読者は初版用リポジトリ、第2版の読者は本リポジトリを参照してください。
 
 ## ディレクトリ構成
 
-v5 全16章 + 付録A / C のサンプルコードを章ごとに格納しています。各レシピは `recipe-NN/` サブディレクトリに配置されます。
+第2版 全16章 + 付録A / C のサンプルコードを章ごとに格納しています。各レシピは `recipe-NN/` サブディレクトリに配置されます。
 
 ### 第1部 基盤編
 - [`ch01-claude-md/`](./ch01-claude-md/) — CLAUDE.md & 設定最適化（レシピ01-06）
@@ -47,13 +47,13 @@ v5 全16章 + 付録A / C のサンプルコードを章ごとに格納してい
 - [`appendix-a-mcp-reference/`](./appendix-a-mcp-reference/) — MCPサーバーリファレンス
 - [`appendix-c-troubleshooting/`](./appendix-c-troubleshooting/) — トラブルシューティング辞典
 
-## v4 → v5 の主な変更点
+## 初版から第2版への主な変更点
 
-v4（初版、2026-02）から v5（第2版、2026 年内出版予定）への刷新内容:
+初版（2026-02 発行）から第2版（2026 年発行予定）への刷新内容:
 
-- **REWRITE 8本** — モデル選択戦略 / Progressive Disclosure / Context engineering / native isolation: worktree / 70/20/10 Advisor / 20+ Hook イベント / Remote Control 統合
-- **NEW 11本** — Fast Mode / Zen MCP / Plugin Marketplace 配布 / Agent Teams evals・observability / Monitor + /loop / Ultraplan + Ultrareview / Harness Engineering / Channels × 2 / Computer Use × 2 / Routines
-- **DROP 2本** — Claude Code as MCP server、`!command` 単独レシピ（Hooks UserPromptSubmit に統合）
+- **全面書き直し 8本** — モデル選択戦略 / Progressive Disclosure / Context engineering / native isolation: worktree / 70/20/10 Advisor / 20+ Hook イベント / Remote Control 統合
+- **新規追加 11本** — Fast Mode / Zen MCP / Plugin Marketplace 配布 / Agent Teams evals・observability / Monitor + /loop / Ultraplan + Ultrareview / Harness Engineering / Channels × 2 / Computer Use × 2 / Routines
+- **削除 2本** — Claude Code as MCP server、`!command` 単独レシピ（Hooks UserPromptSubmit に統合）
 
 ## 使い方
 
@@ -67,9 +67,9 @@ MIT License — 詳細は [LICENSE](./LICENSE) を参照してください。
 
 ## 関連リンク
 
-- [v1 サンプルコード（初版）](https://github.com/forest6511/claude-code-recipes)
+- [初版用サンプルコード](https://github.com/forest6511/claude-code-recipes)
 - [Amazon Kindle 初版](https://www.amazon.co.jp/dp/B0GMQ18MFR) — 第2版リンクは出版後に追記
 
 ---
 
-**Status**: v2 は 2026-04-24 時点でディレクトリ骨格のみ。v4 既存 KEEP レシピの移行と v5 新規レシピの追加は段階的に進行します。
+**Status**: 本リポは 2026-04-24 時点でディレクトリ骨格のみ。初版から引き継ぐレシピの移行と第2版で新規追加するレシピの実装は段階的に進行します。

@@ -1,6 +1,6 @@
 # Recipe 87: prompt/agent型Hooks + UserPromptSubmit動的コンテキスト
 
-LLM ベースの judgement (prompt 型 / agent 型 hook) と、UserPromptSubmit による動的コンテキスト注入を統合。v4 の `!``command``` 動的コンテキストは UserPromptSubmit に吸収。
+LLM ベースの judgement (prompt 型 / agent 型 hook) と、UserPromptSubmit による動的コンテキスト注入を統合。初版の `!``command``` 動的コンテキストは UserPromptSubmit に吸収。
 
 ## ファイル構成
 
