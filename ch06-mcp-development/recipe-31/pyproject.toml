@@ -3,7 +3,7 @@ name = "file-analyzer"
 version = "1.0.0"
 requires-python = ">=3.10"
 dependencies = [
-    "mcp[cli]>=1.2.0",
+    "mcp[cli]>=1.2.0,<2",
 ]
 
 [project.scripts]
