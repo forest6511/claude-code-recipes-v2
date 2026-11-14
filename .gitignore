@@ -146,3 +146,6 @@ vite.config.ts.timestamp-*
 !**/CLAUDE.local.md
 !**/.claude/
 !**/.claude/**
+
+# Playwright test output
+test-results/
